@@ -14,6 +14,8 @@ while True:
     draw_grid()
     display_cells(current_gen)
 
+    time.sleep(PAUSE_LENGTH)
+
     pygame.display.update()
 
     get_next_gen(current_gen, next_gen)

@@ -1,10 +1,12 @@
-import pygame, sys, os, copy
+import pygame, sys, os, copy, time
 
 sc_width_heighy = 800
 total_cols = 80
 cell_size = sc_width_heighy // total_cols
 alive = 1
 dead = 0
+
+PAUSE_LENGTH = 0.15
 
 #загрузка клетки
 Alive_img = pygame.image.load(os.path.join("Graphics", "Alive.jpg"))
@@ -15,19 +17,18 @@ white = (255, 255, 255)
 pygame.init()
 screen = pygame.display.set_mode((sc_width_heighy, sc_width_heighy))
 
+
 def load_init_pattern():
     next_gen=[]
-    #загрузка файла поколения
-    with open("initial_pattern.txt", "r") as file:
+    with open ("initial_pattern.txt", "r") as file:
         for line in file:
             row=[]
             for char in line.strip():
                 row.append(int(char))
             next_gen.append(row)
-        return next_gen
+    return next_gen
 
 
-#создания поля
 def draw_grid():
     for row in range(total_cols):
         for col in range(total_cols):
@@ -41,7 +42,6 @@ def display_cells(cells):
                 screen.blit(Alive_img, (x*cell_size, y*cell_size))
 
 
-#карта
 def get_next_gen(current_gen, next_gen):
     for x in range(total_cols):
         for y in range(total_cols):
@@ -50,7 +50,6 @@ def get_next_gen(current_gen, next_gen):
             above = (y-1) % total_cols
             below = (y+1) % total_cols
 
-            #подсчёт номера живых
             numNeighbours = 0
             if current_gen[above][left] == alive:
                 numNeighbours += 1
@@ -69,10 +68,9 @@ def get_next_gen(current_gen, next_gen):
             if current_gen[below][right] == alive:
                 numNeighbours += 1
 
-                #правила
-                if current_gen[y][x] == alive and (numNeighbours == 2 or numNeighbours == 3):
-                    next_gen[y][x] = alive
-                elif current_gen[y][x] == dead and numNeighbours == 3:
-                    next_gen[y][x] = alive
-                else:
-                    next_gen[y][x] = dead
+            if current_gen[y][x] == alive and (numNeighbours == 2 or numNeighbours == 3):
+                next_gen[y][x] = alive
+            elif current_gen[y][x] == dead and numNeighbours == 3:
+                next_gen[y][x] = alive
+            else:
+                next_gen[y][x] = dead
