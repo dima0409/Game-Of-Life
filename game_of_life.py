@@ -10,14 +10,18 @@ PAUSE_LENGTH = 0.15
 
 #загрузка клетки
 Alive_img = pygame.image.load(os.path.join("Graphics", "Alive.jpg"))
+#загрузка иконки
+icon = pygame.image.load(os.path.join("Graphics", "Icon.png"))
 
 black = (128,128,128)
 white = (255, 255, 255)
 
 pygame.init()
 screen = pygame.display.set_mode((sc_width_heighy, sc_width_heighy))
+pygame.display.set_caption("Game of life")
+pygame.display.set_icon(icon)
 
-
+#чтения жизни
 def load_init_pattern():
     next_gen=[]
     with open ("initial_pattern.txt", "r") as file:
@@ -28,13 +32,14 @@ def load_init_pattern():
             next_gen.append(row)
     return next_gen
 
-
+#генерация поля
 def draw_grid():
     for row in range(total_cols):
         for col in range(total_cols):
             rect = pygame.Rect(col * cell_size, row * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, black, rect, 1)
 
+#вывод живых на экран
 def display_cells(cells):
     for x in range(total_cols):
         for y in range(total_cols):
@@ -50,6 +55,7 @@ def get_next_gen(current_gen, next_gen):
             above = (y-1) % total_cols
             below = (y+1) % total_cols
 
+            #подсчёт живых
             numNeighbours = 0
             if current_gen[above][left] == alive:
                 numNeighbours += 1
@@ -68,6 +74,7 @@ def get_next_gen(current_gen, next_gen):
             if current_gen[below][right] == alive:
                 numNeighbours += 1
 
+            #Conway правила
             if current_gen[y][x] == alive and (numNeighbours == 2 or numNeighbours == 3):
                 next_gen[y][x] = alive
             elif current_gen[y][x] == dead and numNeighbours == 3:

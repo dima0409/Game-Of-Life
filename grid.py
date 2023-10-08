@@ -1,8 +1,10 @@
 from game_of_life import *
 
+#генерация популяции
 grid_state = [[dead for _ in range(total_cols)]
               for _ in range(total_cols)]
 
+#сохранение жизни
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  
@@ -15,6 +17,7 @@ while True:
             pygame.quit()
             sys.exit()
 
+#получение клика от мышки в клетке
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             col = pos[0] // cell_size
